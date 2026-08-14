@@ -1,0 +1,43 @@
+{% extends "layout.html" %}
+
+{% block title %}Customers - Vehicle Insurance{% endblock %}
+{% block breadcrumb %}Customers{% endblock %}
+{% block page_heading %}Customer Management{% endblock %}
+
+{% block content %}
+<div class="panel-card">
+    <div class="panel-card-header">
+        <div><p class="eyebrow">Customers</p><h2>Customer Records</h2></div>
+        <a href="{{ url_for('add_customer') }}" class="btn btn-primary">Add Customer</a>
+    </div>
+    <form action="{{ url_for('customers') }}" method="get" class="search-form">
+        <input type="search" name="q" value="{{ query }}" placeholder="Search by name, ID or email" />
+        <button type="submit" class="btn btn-secondary">Search</button>
+    </form>
+</div>
+
+<div class="table-panel">
+    <table class="data-table">
+        <thead>
+            <tr><th>Customer ID</th><th>Name</th><th>Email</th><th>Phone</th><th>Vehicles</th><th>Status</th><th>Actions</th></tr>
+        </thead>
+        <tbody>
+            {% if customers %}
+                {% for c in customers %}
+                    <tr>
+                        <td>{{ c.customer_id }}</td>
+                        <td>{{ c.name }}</td>
+                        <td>{{ c.email }}</td>
+                        <td>{{ c.phone }}</td>
+                        <td>{{ vehicle_counts.get(c.customer_id, 0) }}</td>
+                        <td><span class="status-pill active">Active</span></td>
+                        <td><a href="{{ url_for('view_customer', customer_id=c.customer_id) }}" class="btn btn-secondary">View</a></td>
+                    </tr>
+                {% endfor %}
+            {% else %}
+                <tr><td colspan="7">No customers found.</td></tr>
+            {% endif %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

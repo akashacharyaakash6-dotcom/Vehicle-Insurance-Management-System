@@ -1,0 +1,42 @@
+{% extends "layout.html" %}
+
+{% block title %}Vehicles - Vehicle Insurance{% endblock %}
+{% block breadcrumb %}Vehicles{% endblock %}
+{% block page_heading %}Vehicle Management{% endblock %}
+
+{% block content %}
+<div class="panel-card">
+    <div class="panel-card-header">
+        <div><p class="eyebrow">Vehicles</p><h2>All Registered Vehicles</h2></div>
+        <a href="{{ url_for('add_vehicle') }}" class="btn btn-primary">Add Vehicle</a>
+    </div>
+    <form action="{{ url_for('vehicles') }}" method="get" class="search-form">
+        <input type="search" name="q" value="{{ query }}" placeholder="Search by vehicle, brand, model or owner" />
+        <button type="submit" class="btn btn-secondary">Search</button>
+    </form>
+</div>
+
+<div class="table-panel">
+    <table class="data-table">
+        <thead>
+            <tr><th>Vehicle ID</th><th>Number</th><th>Brand</th><th>Model</th><th>Owner ID</th><th>Action</th></tr>
+        </thead>
+        <tbody>
+            {% if vehicles %}
+                {% for v in vehicles %}
+                    <tr>
+                        <td>{{ v.vehicle_id }}</td>
+                        <td>{{ v.vehicle_number }}</td>
+                        <td>{{ v.brand }}</td>
+                        <td>{{ v.model }}</td>
+                        <td>{{ v.customer_id }}</td>
+                        <td><a href="{{ url_for('view_vehicle', vehicle_id=v.vehicle_id) }}" class="btn btn-secondary">Details</a></td>
+                    </tr>
+                {% endfor %}
+            {% else %}
+                <tr><td colspan="6">No vehicles found.</td></tr>
+            {% endif %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

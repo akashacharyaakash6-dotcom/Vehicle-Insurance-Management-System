@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Create Account - Vehicle Insurance</title>
+    <link rel="stylesheet" href="/static/css/style.css" />
+</head>
+<body>
+    <div class="auth-page auth-register">
+        <div class="auth-hero">
+            <div class="hero-badge">Premium Insurance</div>
+            <div class="hero-copy">
+                <strong>Modern insurance tools for a safer fleet.</strong>
+                <p>Quickly onboard your team and manage customers, vehicles, policies, and claims from a premium dashboard.</p>
+            </div>
+            <div class="hero-stats">
+                <div>
+                    <strong>98%</strong>
+                    <span>Customer satisfaction</span>
+                </div>
+                <div>
+                    <strong>1.2K</strong>
+                    <span>Active policies</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="auth-panel">
+            <div class="auth-header">
+                <p class="eyebrow">Create Account</p>
+                <h1>Sign up to your insurance workspace</h1>
+                <p class="subtext">Use a Gmail address and secure password to join the management portal.</p>
+            </div>
+
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    <div class="alert-list">
+                        {% for category, message in messages %}
+                            <div class="alert alert-{{ category }}">{{ message }}</div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            {% endwith %}
+
+            <form class="auth-form" action="{{ url_for('register') }}" method="post" novalidate>
+                <div class="form-group">
+                    <label for="full_name">Full Name</label>
+                    <input type="text" id="full_name" name="full_name" placeholder="Jane Doe" required />
+                </div>
+                <div class="form-group">
+                    <label for="email">Gmail Address</label>
+                    <input type="email" id="email" name="email" placeholder="you@gmail.com" required />
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" placeholder="Enter password" required />
+                </div>
+                <div class="form-group">
+                    <label for="confirm_password">Confirm Password</label>
+                    <input type="password" id="confirm_password" name="confirm_password" placeholder="Confirm password" required />
+                </div>
+                <button type="submit" class="btn btn-primary btn-block">Create Account</button>
+            </form>
+
+            <p class="auth-footer">Already have an account? <a href="{{ url_for('login') }}">Login</a></p>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,39 @@
+{% extends "layout.html" %}
+
+{% block title %}Reports - Vehicle Insurance{% endblock %}
+{% block breadcrumb %}Reports{% endblock %}
+{% block page_heading %}Analytics & Reports{% endblock %}
+
+{% block content %}
+<div class="stats-grid">
+    <article class="metric-card"><div class="metric-title"><p>Customers</p></div><p class="metric-value">{{ customer_count }}</p><div class="metric-meta"><span class="metric-badge">Total</span><span>Profiles</span></div></article>
+    <article class="metric-card"><div class="metric-title"><p>Vehicles</p></div><p class="metric-value">{{ vehicle_count }}</p><div class="metric-meta"><span class="metric-badge">Total</span><span>Fleet</span></div></article>
+    <article class="metric-card"><div class="metric-title"><p>Policies</p></div><p class="metric-value">{{ policy_count }}</p><div class="metric-meta"><span class="metric-badge">Active</span><span>Coverage</span></div></article>
+    <article class="metric-card"><div class="metric-title"><p>Claims</p></div><p class="metric-value">{{ claim_count }}</p><div class="metric-meta"><span class="metric-badge">Reported</span><span>Updates</span></div></article>
+</div>
+
+<div class="panel-card">
+    <div class="panel-card-header"><div><h2>Reports summary</h2><p class="text-muted">Export or review high-level policy, claims, and payment metrics.</p></div></div>
+    <div class="form-actions">
+        <button class="btn btn-secondary">Export PDF</button>
+        <button class="btn btn-secondary">Export Excel</button>
+        <button class="btn btn-ghost">Print</button>
+    </div>
+</div>
+
+<div class="table-panel">
+    <h3>Recent Claims</h3>
+    <table class="data-table">
+        <thead><tr><th>Claim ID</th><th>Policy</th><th>Date</th><th>Status</th></tr></thead>
+        <tbody>
+            {% if recent_claims %}
+                {% for claim in recent_claims %}
+                    <tr><td>{{ claim.claim_id }}</td><td>{{ claim.policy_id }}</td><td>{{ claim.claim_date }}</td><td><span class="status-pill {{ claim.status|lower }}">{{ claim.status }}</span></td></tr>
+                {% endfor %}
+            {% else %}
+                <tr><td colspan="4">No recent claims available.</td></tr>
+            {% endif %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

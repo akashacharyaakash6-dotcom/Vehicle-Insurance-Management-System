@@ -1,0 +1,24 @@
+{% extends "layout.html" %}
+
+{% block title %}Add Vehicle - Vehicle Insurance{% endblock %}
+{% block breadcrumb %}Vehicles / Add{% endblock %}
+{% block page_heading %}Add New Vehicle{% endblock %}
+
+{% block content %}
+<div class="form-panel">
+    <form class="form-grid" method="post" action="{{ url_for('add_vehicle') }}">
+        <div class="form-group"><label for="vehicle_id">Vehicle ID</label><input id="vehicle_id" type="text" name="vehicle_id" class="form-control" placeholder="V-1001" required /></div>
+        <div class="form-group"><label for="customer_id">Customer ID</label><input id="customer_id" type="text" name="customer_id" class="form-control" placeholder="C-1001" required /></div>
+        <div class="form-group"><label for="vehicle_number">Vehicle Number</label><input id="vehicle_number" type="text" name="vehicle_number" class="form-control" placeholder="MH12AB1234" required /></div>
+        <div class="form-group"><label for="brand">Brand</label><input id="brand" type="text" name="brand" class="form-control" placeholder="Toyota" required /></div>
+        <div class="form-group"><label for="model">Model</label><input id="model" type="text" name="model" class="form-control" placeholder="Corolla" required /></div>
+        <div class="form-group"><label for="year">Year</label><input id="year" type="number" name="year" class="form-control" placeholder="2024" min="1900" max="2100" required /></div>
+        <div class="form-group"><label for="engine_no">Engine No</label><input id="engine_no" type="text" name="engine_no" class="form-control" placeholder="ENG123456" required /></div>
+        <div class="form-group"><label for="chassis_no">Chassis No</label><input id="chassis_no" type="text" name="chassis_no" class="form-control" placeholder="CHS123456" required /></div>
+        <div class="form-group full-width" style="display:flex; justify-content:flex-end; gap:1rem;">
+            <button type="submit" class="btn btn-primary">Save Vehicle</button>
+            <a href="{{ url_for('dashboard') }}" class="btn btn-ghost">Cancel</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

@@ -1,0 +1,47 @@
+{% extends "layout.html" %}
+
+{% block title %}Settings - Vehicle Insurance{% endblock %}
+{% block breadcrumb %}Settings{% endblock %}
+{% block page_heading %}Account Settings{% endblock %}
+
+{% block content %}
+    <div class="content-grid">
+        <section class="panel-card">
+            <div class="panel-card-header">
+                <div>
+                    <p class="eyebrow">Settings</p>
+                    <h2>Account preferences</h2>
+                </div>
+                <span class="status-badge badge-secondary">Stable</span>
+            </div>
+
+            <div class="settings-grid">
+                <div class="settings-card">
+                    <h3>Profile</h3>
+                    <p>Review your account details and access level.</p>
+                    <div class="info-row"><span>Name</span><strong>{{ username }}</strong></div>
+                    <div class="info-row"><span>Email</span><strong>{{ session.get('email', 'user@example.com') }}</strong></div>
+                </div>
+
+                <div class="settings-card">
+                    <h3>Security</h3>
+                    <p>Manage passwords, sessions, and access policy.</p>
+                    <button class="btn btn-secondary">Update Password</button>
+                </div>
+
+                <div class="settings-card settings-card-full">
+                    <h3>Notifications</h3>
+                    <p>Receive updates about claims, renewals, and upcoming payments.</p>
+                    <div class="toggle-row">
+                        <span>Email alerts</span>
+                        <label class="switch"><input type="checkbox" checked><span class="slider"></span></label>
+                    </div>
+                    <div class="toggle-row">
+                        <span>Policy reminders</span>
+                        <label class="switch"><input type="checkbox"><span class="slider"></span></label>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+{% endblock %}

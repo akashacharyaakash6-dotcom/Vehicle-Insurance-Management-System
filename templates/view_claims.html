@@ -1,0 +1,62 @@
+{% extends "layout.html" %}
+
+{% block title %}Claims - Vehicle Insurance{% endblock %}
+{% block breadcrumb %}Claims{% endblock %}
+{% block page_heading %}Claims Management{% endblock %}
+
+{% block content %}
+<div class="stats-grid">
+    <article class="metric-card"><div class="metric-title"><p>Total Claims</p></div><p class="metric-value">{{ claims|length }}</p><div class="metric-meta"><span class="metric-badge">Overview</span><span>Claim volume</span></div></article>
+    <article class="metric-card"><div class="metric-title"><p>Pending</p></div><p class="metric-value">{{ pending_count }}</p><div class="metric-meta"><span class="metric-badge">Review</span><span>In progress</span></div></article>
+    <article class="metric-card"><div class="metric-title"><p>Approved</p></div><p class="metric-value">{{ approved_count }}</p><div class="metric-meta"><span class="metric-badge">Resolved</span><span>Closed</span></div></article>
+    <article class="metric-card"><div class="metric-title"><p>Rejected</p></div><p class="metric-value">{{ rejected_count }}</p><div class="metric-meta"><span class="metric-badge">Declined</span><span>Closed</span></div></article>
+</div>
+
+<div class="panel-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+    <h2>Claim Records</h2>
+    <a href="{{ url_for('add_claim') }}" class="btn btn-primary">+ Submit New Claim</a>
+</div>
+
+<div class="table-panel">
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th>Claim ID</th>
+                <th>Policy Number</th>
+                <th>Customer & Vehicle</th>
+                <th>Claim Type</th>
+                <th>Incident Details</th>
+                <th>Estimated Damage</th>
+                <th>Status</th>
+                <th>Submitted Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% if claims %}
+                {% for claim in claims %}
+                    <tr>
+                        <td><strong>{{ claim.claim_id }}</strong></td>
+                        <td>{{ claim.policy_id }}</td>
+                        <td>
+                            <div><strong>{{ claim.customer_name or 'N/A' }}</strong></div>
+                            <small style="color: var(--text-muted, #64748b);">{{ claim.vehicle_number or '' }}</small>
+                        </td>
+                        <td><span class="badge" style="background: rgba(99, 102, 241, 0.1); color: #6366f1; padding: 4px 8px; border-radius: 4px; font-weight: 500;">{{ claim.reason }}</span></td>
+                        <td>
+                            <div>{{ claim.accident_date }}</div>
+                            {% if claim.incident_location %}
+                                <small style="color: var(--text-muted, #64748b);">{{ claim.incident_location }}</small>
+                            {% endif %}
+                        </td>
+                        <td><strong>{{ claim.claim_amount }}</strong></td>
+                        <td><span class="status-pill {{ claim.status|lower }}">{{ claim.status }}</span></td>
+                        <td>{{ claim.claim_date }}</td>
+                    </tr>
+                {% endfor %}
+            {% else %}
+                <tr><td colspan="8" style="text-align: center; padding: 2rem;">No claims found yet. <a href="{{ url_for('add_claim') }}">Submit your first claim</a>.</td></tr>
+            {% endif %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

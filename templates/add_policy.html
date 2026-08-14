@@ -1,0 +1,35 @@
+{% extends "layout.html" %}
+
+{% block title %}Add Policy - Vehicle Insurance{% endblock %}
+{% block breadcrumb %}Policies / Add{% endblock %}
+{% block page_heading %}Add New Policy{% endblock %}
+
+{% block content %}
+<div class="form-panel">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <div class="alert-list">
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }}">{{ message }}</div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
+
+    <form class="form-grid" method="post" action="{{ url_for('add_policy') }}">
+        <div class="form-group"><label for="policy_id">Policy ID</label><input id="policy_id" type="text" name="policy_id" class="form-control" placeholder="P-1001" required /></div>
+        <div class="form-group"><label for="customer_id">Customer ID</label><input id="customer_id" type="text" name="customer_id" class="form-control" placeholder="C-1001" required /></div>
+        <div class="form-group"><label for="vehicle_id">Vehicle ID</label><input id="vehicle_id" type="text" name="vehicle_id" class="form-control" placeholder="V-1001" required /></div>
+        <div class="form-group"><label for="policy_type">Policy Type</label><input id="policy_type" type="text" name="policy_type" class="form-control" placeholder="Comprehensive" required /></div>
+        <div class="form-group"><label for="premium">Premium</label><input id="premium" type="text" name="premium" class="form-control" placeholder="₹12,000" required /></div>
+        <div class="form-group"><label for="start_date">Start Date</label><input id="start_date" type="date" name="start_date" class="form-control" required /></div>
+        <div class="form-group"><label for="end_date">End Date</label><input id="end_date" type="date" name="end_date" class="form-control" required /></div>
+        <div class="form-group full-width"><label for="coverage">Coverage</label><input id="coverage" type="text" name="coverage" class="form-control" placeholder="Accidental + Theft + Fire" required /></div>
+        <div class="form-group"><label for="status">Status</label><input id="status" type="text" name="status" class="form-control" placeholder="Active" required /></div>
+        <div class="form-group full-width" style="display:flex; justify-content:flex-end; gap:1rem;">
+            <button type="submit" class="btn btn-primary">Save Policy</button>
+            <a href="{{ url_for('dashboard') }}" class="btn btn-ghost">Cancel</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

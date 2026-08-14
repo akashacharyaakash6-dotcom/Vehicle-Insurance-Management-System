@@ -1,0 +1,23 @@
+{% extends "layout.html" %}
+
+{% block title %}Add Customer - Vehicle Insurance{% endblock %}
+{% block breadcrumb %}Customers / Add{% endblock %}
+{% block page_heading %}Add New Customer{% endblock %}
+
+{% block content %}
+<div class="form-panel">
+    <form class="form-grid" method="post" action="{{ url_for('add_customer') }}">
+        <div class="form-group"><label for="customer_id">Customer ID</label><input id="customer_id" type="text" name="customer_id" class="form-control" placeholder="C-1001" required /></div>
+        <div class="form-group"><label for="name">Full Name</label><input id="name" type="text" name="name" class="form-control" placeholder="John Doe" required /></div>
+        <div class="form-group"><label for="email">Email Address</label><input id="email" type="email" name="email" class="form-control" placeholder="john@example.com" required /></div>
+        <div class="form-group"><label for="phone">Phone Number</label><input id="phone" type="text" name="phone" class="form-control" placeholder="9876543210" required /></div>
+        <div class="form-group full-width"><label for="address">Address</label><input id="address" type="text" name="address" class="form-control" placeholder="123 Main Street, City" required /></div>
+        <div class="form-group"><label for="dob">Date of Birth</label><input id="dob" type="date" name="dob" class="form-control" required /></div>
+        <div class="form-group"><label for="license_no">License Number</label><input id="license_no" type="text" name="license_no" class="form-control" placeholder="LIC12345" required /></div>
+        <div class="form-group full-width" style="display:flex; justify-content:flex-end; gap:1rem;">
+            <button type="submit" class="btn btn-primary">Save Customer</button>
+            <a href="{{ url_for('dashboard') }}" class="btn btn-ghost">Cancel</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

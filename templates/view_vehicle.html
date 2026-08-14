@@ -1,0 +1,45 @@
+{% extends "layout.html" %}
+
+{% block title %}Vehicle Details - Vehicle Insurance{% endblock %}
+{% block breadcrumb %}Vehicles / Details{% endblock %}
+{% block page_heading %}Vehicle Details{% endblock %}
+
+{% block content %}
+<div class="panel-card">
+    <div class="panel-card-header"><div><p class="eyebrow">Vehicle</p><h2>{{ vehicle.vehicle_number }}</h2></div><a href="{{ url_for('vehicles') }}" class="btn btn-secondary">Back</a></div>
+    <div class="form-grid">
+        <div class="form-group"><label>Vehicle ID</label><div class="form-control">{{ vehicle.vehicle_id }}</div></div>
+        <div class="form-group"><label>Brand</label><div class="form-control">{{ vehicle.brand }}</div></div>
+        <div class="form-group"><label>Model</label><div class="form-control">{{ vehicle.model }}</div></div>
+        <div class="form-group"><label>Year</label><div class="form-control">{{ vehicle.year }}</div></div>
+        <div class="form-group"><label>Engine No</label><div class="form-control">{{ vehicle.engine_no }}</div></div>
+        <div class="form-group"><label>Chassis No</label><div class="form-control">{{ vehicle.chassis_no }}</div></div>
+    </div>
+</div>
+
+<div class="panel-card">
+    <div class="panel-card-header"><div><h3>Owner Details</h3></div></div>
+    <div class="form-grid">
+        <div class="form-group"><label>Customer ID</label><div class="form-control">{{ vehicle.customer_id or 'N/A' }}</div></div>
+        <div class="form-group"><label>Name</label><div class="form-control">{{ customer.name if customer else 'Unknown' }}</div></div>
+        <div class="form-group"><label>Email</label><div class="form-control">{{ customer.email if customer else '-' }}</div></div>
+        <div class="form-group"><label>Phone</label><div class="form-control">{{ customer.phone if customer else '-' }}</div></div>
+    </div>
+</div>
+
+<div class="table-panel">
+    <h3>Related Policies</h3>
+    <table class="data-table">
+        <thead><tr><th>Policy ID</th><th>Type</th><th>Premium</th><th>Start</th><th>End</th><th>Status</th></tr></thead>
+        <tbody>
+            {% if policies %}
+                {% for p in policies %}
+                    <tr><td>{{ p.policy_id }}</td><td>{{ p.policy_type }}</td><td>{{ p.premium }}</td><td>{{ p.start_date }}</td><td>{{ p.end_date }}</td><td><span class="status-pill {{ p.status|lower }}">{{ p.status }}</span></td></tr>
+                {% endfor %}
+            {% else %}
+                <tr><td colspan="6">No policies linked to this vehicle.</td></tr>
+            {% endif %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

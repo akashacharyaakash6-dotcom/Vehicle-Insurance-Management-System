@@ -1,0 +1,128 @@
+/* Enhanced Login Special Design Styles */
+
+.login-wrapper .checkbox-label input[type="checkbox"] {
+    accent-color: #d69d3a;
+    cursor: pointer;
+    width: 18px;
+    height: 18px;
+}
+
+.login-wrapper .forgot-link::after {
+    content: "";
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: linear-gradient(90deg, #d69d3a, #f8c46b);
+    transition: width 0.3s ease;
+}
+
+.login-wrapper .forgot-link:hover::after {
+    width: 100%;
+}
+
+.login-wrapper .footer-text {
+    font-size: 0.9rem;
+    line-height: 1.5;
+}
+
+.btn-primary {
+    width: 100%;
+    padding: 1.2rem 1rem;
+    border: none;
+    border-radius: 28px;
+    background: linear-gradient(135deg, #d69d3a, #8b6029);
+    color: #fff;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    font-size: 1.05rem;
+    cursor: pointer;
+    box-shadow: 0 18px 30px rgba(125, 91, 42, 0.28);
+    transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.25s ease, opacity 0.25s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.btn-primary::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.2);
+    transform: translate(-50%, -50%);
+    transition: width 0.6s ease, height 0.6s ease;
+}
+
+.btn-primary:hover::before {
+    width: 300px;
+    height: 300px;
+}
+
+.btn-primary:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 28px 48px rgba(125, 91, 42, 0.36);
+}
+
+.btn-primary:active {
+    transform: translateY(-1px);
+    box-shadow: 0 12px 22px rgba(125, 91, 42, 0.24);
+    opacity: 0.96;
+}
+
+/* Error Message Styling */
+.error-message {
+    display: block;
+    margin-top: 0.6rem;
+    font-size: 0.85rem;
+    color: #d66a5f;
+    font-weight: 600;
+    animation: slideIn 0.3s ease;
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-8px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Form Animation */
+#loginForm {
+    animation: formFadeIn 0.6s ease;
+}
+
+@keyframes formFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Server Error Styling */
+.server-error {
+    background: linear-gradient(135deg, rgba(214, 106, 95, 0.1), rgba(230, 124, 115, 0.1));
+    border: 2px solid #d66a5f;
+    border-radius: 18px;
+    padding: 1rem 1.2rem;
+    margin-bottom: 1.5rem;
+    color: #d66a5f;
+    font-weight: 600;
+    animation: slideIn 0.3s ease;
+}
+
+.server-error p {
+    margin: 0;
+}

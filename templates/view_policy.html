@@ -1,0 +1,45 @@
+{% extends "layout.html" %}
+
+{% block title %}Policy Details - Vehicle Insurance{% endblock %}
+{% block breadcrumb %}Policies / Details{% endblock %}
+{% block page_heading %}Policy Details{% endblock %}
+
+{% block content %}
+<div class="panel-card">
+    <div class="panel-card-header"><div><p class="eyebrow">Policy</p><h2>{{ policy.policy_id }}</h2></div><a href="{{ url_for('policies') }}" class="btn btn-secondary">Back</a></div>
+    <div class="form-grid">
+        <div class="form-group"><label>Type</label><div class="form-control">{{ policy.policy_type }}</div></div>
+        <div class="form-group"><label>Premium</label><div class="form-control">{{ policy.premium }}</div></div>
+        <div class="form-group"><label>Coverage</label><div class="form-control">{{ policy.coverage }}</div></div>
+        <div class="form-group"><label>Status</label><div class="form-control">{{ policy.status }}</div></div>
+        <div class="form-group"><label>Start Date</label><div class="form-control">{{ policy.start_date }}</div></div>
+        <div class="form-group"><label>End Date</label><div class="form-control">{{ policy.end_date }}</div></div>
+    </div>
+</div>
+
+<div class="panel-card">
+    <div class="panel-card-header"><div><h3>Linked Records</h3></div></div>
+    <div class="table-panel">
+        <table class="data-table">
+            <thead><tr><th>Customer</th><th>Vehicle</th><th>Claim Count</th></tr></thead>
+            <tbody><tr><td>{{ customer.name if customer else 'N/A' }}</td><td>{{ vehicle.vehicle_number if vehicle else 'N/A' }}</td><td>{{ claims|length }}</td></tr></tbody>
+        </table>
+    </div>
+</div>
+
+<div class="table-panel">
+    <h3>Related Claims</h3>
+    <table class="data-table">
+        <thead><tr><th>Claim ID</th><th>Date</th><th>Reason</th><th>Amount</th><th>Status</th></tr></thead>
+        <tbody>
+            {% if claims %}
+                {% for c in claims %}
+                    <tr><td>{{ c.claim_id }}</td><td>{{ c.claim_date }}</td><td>{{ c.reason }}</td><td>{{ c.claim_amount }}</td><td><span class="status-pill {{ c.status|lower }}">{{ c.status }}</span></td></tr>
+                {% endfor %}
+            {% else %}
+                <tr><td colspan="5">No claims found for this policy.</td></tr>
+            {% endif %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

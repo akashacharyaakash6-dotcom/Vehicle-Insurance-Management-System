@@ -1,0 +1,112 @@
+{% extends "layout.html" %}
+
+{% block title %}Dashboard - Vehicle Insurance{% endblock %}
+{% block breadcrumb %}Dashboard{% endblock %}
+{% block page_heading %}Hello, {{ username }}{% endblock %}
+
+{% block topbar_tools %}
+<form action="{{ url_for('dashboard') }}" method="get" class="search-form">
+    <label for="searchInput" class="sr-only">Search</label>
+    <input id="searchInput" type="search" name="q" placeholder="Search dashboard" />
+    <button type="submit" class="btn btn-icon">🔍</button>
+</form>
+{% endblock %}
+
+{% block content %}
+<div class="panel-card">
+    <div class="panel-card-header">
+        <div>
+            <p class="eyebrow">Hello</p>
+            <h2>Welcome back to your Vehicle Insurance Management System</h2>
+        </div>
+        <span class="status-badge badge-secondary">Premium Overview</span>
+    </div>
+    <p class="text-muted">Manage customers, vehicles, policies, claims, payments, and reports from a refined premium
+        dashboard experience.</p>
+</div>
+
+<div class="stats-grid">
+    <article class="metric-card">
+        <div class="metric-title">
+            <p>Total Customers</p>
+        </div>
+        <p class="metric-value">{{ total_customers }}</p>
+        <div class="metric-meta">
+            <span class="metric-badge">Stable</span>
+            <span>All active profiles</span>
+        </div>
+    </article>
+    <article class="metric-card">
+        <div class="metric-title">
+            <p>Total Vehicles</p>
+        </div>
+        <p class="metric-value">{{ total_vehicles }}</p>
+        <div class="metric-meta">
+            <span class="metric-badge">Fleet growth</span>
+            <span>Insured vehicles</span>
+        </div>
+    </article>
+    <article class="metric-card">
+        <div class="metric-title">
+            <p>Active Policies</p>
+        </div>
+        <p class="metric-value">{{ active_policies }}</p>
+        <div class="metric-meta">
+            <span class="metric-badge">Live</span>
+            <span>Current coverage</span>
+        </div>
+    </article>
+    <article class="metric-card">
+        <div class="metric-title">
+            <p>Pending Claims</p>
+        </div>
+        <p class="metric-value">{{ pending_claims }}</p>
+        <div class="metric-meta">
+            <span class="metric-badge">Attention</span>
+            <span>Awaiting review</span>
+        </div>
+    </article>
+</div>
+
+<div class="chart-grid">
+    <section class="chart-panel">
+        <div class="panel-card-header">
+            <div>
+                <h3>Policy Overview</h3>
+                <p class="text-muted">Active vs expired policy trends.</p>
+            </div>
+            <span class="status-badge badge-secondary">Monthly</span>
+        </div>
+        <div class="chart-bars">
+            <div class="chart-bar bar-1"></div>
+            <div class="chart-bar bar-2"></div>
+            <div class="chart-bar bar-3"></div>
+            <div class="chart-bar bar-4"></div>
+        </div>
+        <div class="chart-legend">
+            <span><span class="chart-dot"></span>Active</span>
+            <span><span class="chart-dot" style="background:#E8DFD0"></span>Expired</span>
+        </div>
+    </section>
+
+    <section class="chart-panel">
+        <div class="panel-card-header">
+            <div>
+                <h3>Claims Statistics</h3>
+                <p class="text-muted">Recent claims activity across the system.</p>
+            </div>
+            <span class="status-badge badge-secondary">Review</span>
+        </div>
+        <div class="chart-bars">
+            <div class="chart-bar bar-2" style="background: rgba(30, 41, 59, 0.92);"></div>
+            <div class="chart-bar bar-4" style="background: rgba(91, 124, 153, 0.9);"></div>
+            <div class="chart-bar bar-1" style="background: rgba(232, 223, 208, 0.9);"></div>
+            <div class="chart-bar bar-3" style="background: rgba(255, 253, 248, 0.9);"></div>
+        </div>
+        <div class="chart-legend">
+            <span><span class="chart-dot" style="background:#1E293B"></span>Pending</span>
+            <span><span class="chart-dot" style="background:#5B7C99"></span>Approved</span>
+        </div>
+    </section>
+</div>
+{% endblock %}

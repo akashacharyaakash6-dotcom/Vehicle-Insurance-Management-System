@@ -1,0 +1,36 @@
+{% extends "layout.html" %}
+
+{% block title %}Customer Details - Vehicle Insurance{% endblock %}
+{% block breadcrumb %}Customers / Details{% endblock %}
+{% block page_heading %}Customer Details{% endblock %}
+
+{% block content %}
+<div class="panel-card">
+    <div class="panel-card-header"><div><p class="eyebrow">Customer</p><h2>{{ customer.name }}</h2></div><a href="{{ url_for('customers') }}" class="btn btn-secondary">Back</a></div>
+    <div class="form-grid">
+        <div class="form-group"><label>Name</label><div class="form-control">{{ customer.name }}</div></div>
+        <div class="form-group"><label>Customer ID</label><div class="form-control">{{ customer.customer_id }}</div></div>
+        <div class="form-group"><label>Email</label><div class="form-control">{{ customer.email }}</div></div>
+        <div class="form-group"><label>Phone</label><div class="form-control">{{ customer.phone }}</div></div>
+        <div class="form-group full-width"><label>Address</label><div class="form-control">{{ customer.address }}</div></div>
+        <div class="form-group"><label>DOB</label><div class="form-control">{{ customer.dob }}</div></div>
+        <div class="form-group"><label>License</label><div class="form-control">{{ customer.license_no }}</div></div>
+    </div>
+</div>
+
+<div class="table-panel">
+    <h3>Related Policies</h3>
+    <table class="data-table">
+        <thead><tr><th>Policy ID</th><th>Vehicle ID</th><th>Type</th><th>Premium</th><th>Start</th><th>End</th><th>Status</th></tr></thead>
+        <tbody>
+            {% if policies %}
+                {% for p in policies %}
+                    <tr><td>{{ p.policy_id }}</td><td>{{ p.vehicle_id }}</td><td>{{ p.policy_type }}</td><td>{{ p.premium }}</td><td>{{ p.start_date }}</td><td>{{ p.end_date }}</td><td><span class="status-pill {{ p.status|lower }}">{{ p.status }}</span></td></tr>
+                {% endfor %}
+            {% else %}
+                <tr><td colspan="7">No policies found for this customer.</td></tr>
+            {% endif %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

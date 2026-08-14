@@ -1,0 +1,94 @@
+{% extends "layout.html" %}
+
+{% block title %}Submit Claim - Vehicle Insurance{% endblock %}
+{% block breadcrumb %}Claims / Add{% endblock %}
+{% block page_heading %}Submit a New Claim{% endblock %}
+
+{% block content %}
+<div class="form-panel">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <div class="alert-list">
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }}">{{ message }}</div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
+
+    <form class="form-grid" method="post" enctype="multipart/form-data" action="{{ url_for('add_claim') }}">
+        <div class="form-group">
+            <label for="claim_id">Claim ID</label>
+            <input id="claim_id" type="text" name="claim_id" class="form-control" placeholder="CLM1001 (Auto-generated if empty)" />
+        </div>
+        <div class="form-group">
+            <label for="policy_id">Policy Number</label>
+            {% if policies %}
+                <select id="policy_id" name="policy_id" class="form-control" required>
+                    <option value="">Select policy</option>
+                    {% for policy in policies %}
+                        <option value="{{ policy.policy_id }}">{{ policy.policy_id }} — {{ policy.customer_id }} / {{ policy.vehicle_id }}</option>
+                    {% endfor %}
+                </select>
+            {% else %}
+                <input id="policy_id" type="text" name="policy_id" class="form-control" placeholder="POL2026001" required />
+            {% endif %}
+        </div>
+        <div class="form-group">
+            <label for="customer_name">Customer Name</label>
+            <input id="customer_name" type="text" name="customer_name" class="form-control" placeholder="Akash Kumar" required />
+        </div>
+        <div class="form-group">
+            <label for="vehicle_number">Vehicle Number</label>
+            <input id="vehicle_number" type="text" name="vehicle_number" class="form-control" placeholder="KA01AB1234" required />
+        </div>
+        <div class="form-group">
+            <label for="claim_type">Claim Type</label>
+            <select id="claim_type" name="claim_type" class="form-control" required>
+                <option value="">Select type</option>
+                <option value="Accident">Accident</option>
+                <option value="Theft">Theft</option>
+                <option value="Fire">Fire</option>
+                <option value="Natural Disaster">Natural Disaster</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="accident_date">Incident Date</label>
+            <input id="accident_date" type="date" name="accident_date" class="form-control" required />
+        </div>
+        <div class="form-group">
+            <label for="incident_location">Incident Location</label>
+            <input id="incident_location" type="text" name="incident_location" class="form-control" placeholder="Bangalore" />
+        </div>
+        <div class="form-group">
+            <label for="claim_amount">Estimated Damage</label>
+            <input id="claim_amount" type="text" name="claim_amount" class="form-control" placeholder="₹50,000" required />
+        </div>
+        <div class="form-group">
+            <label for="status">Claim Status</label>
+            <select id="status" name="status" class="form-control">
+                <option value="Pending" selected>Pending</option>
+                <option value="Approved">Approved</option>
+                <option value="Rejected">Rejected</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="claim_date">Submitted Date</label>
+            <input id="claim_date" type="date" name="claim_date" class="form-control" value="{{ today_str }}" />
+        </div>
+        <div class="form-group full-width">
+            <label for="description">Description</label>
+            <textarea id="description" name="description" class="form-control" rows="3" placeholder="Front bumper damaged in accident" required></textarea>
+        </div>
+        <div class="form-group full-width">
+            <label for="documents">Upload Documents</label>
+            <input id="documents" type="file" name="documents" class="form-control" accept="image/*,.pdf" multiple />
+            <p class="input-note">Upload RC, Driving License, FIR, Photos</p>
+        </div>
+        <div class="form-group full-width" style="display:flex; justify-content:flex-end; gap:1rem;">
+            <button type="submit" class="btn btn-primary">Submit Claim</button>
+            <a href="{{ url_for('view_claims') }}" class="btn btn-ghost">Cancel</a>
+        </div>
+    </form>
+</div>
+{% endblock %}
