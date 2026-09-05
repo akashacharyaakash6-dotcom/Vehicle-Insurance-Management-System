@@ -1,0 +1,88 @@
+{% extends "layout.html" %}
+
+{% block title %}Apply for Vehicle Insurance - Customer Portal{% endblock %}
+{% block breadcrumb %}Customer Portal / Buy Insurance{% endblock %}
+{% block page_heading %}Apply & Purchase Insurance Policy{% endblock %}
+
+{% block content %}
+<div class="panel-card" style="max-width: 900px; margin: 0 auto;">
+    <div class="panel-card-header">
+        <div>
+            <h2>Instant Vehicle Policy Enrollment</h2>
+            <p class="text-muted">Select your registered vehicle and choose an insurance plan suited for your needs.</p>
+        </div>
+    </div>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+          <div class="alert alert-{{ category }}" style="margin-bottom: 1rem; padding: 10px; border-radius: 8px; background: rgba(239, 68, 68, 0.2); color: #f87171;">
+            {{ message }}
+          </div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+
+    <form action="{{ url_for('apply_policy') }}" method="post" style="margin-top: 1.5rem;">
+        <div style="margin-bottom: 1.5rem;">
+            <label style="display: block; font-weight: 600; margin-bottom: 0.5rem; color: #e2e8f0;">Select Registered Vehicle *</label>
+            {% if vehicles %}
+                <select name="vehicle_id" required style="width: 100%; padding: 12px; border-radius: 8px; background: #1e293b; color: #fff; border: 1px solid rgba(255,255,255,0.2);">
+                    <option value="">-- Select One of Your Registered Vehicles --</option>
+                    {% for v in vehicles %}
+                        <option value="{{ v.vehicle_id }}">{{ v.brand }} {{ v.model }} (Reg: {{ v.vehicle_number }}) - ID: {{ v.vehicle_id }}</option>
+                    {% endfor %}
+                </select>
+            {% else %}
+                <p style="color: #ef4444; font-size: 0.9rem;">You don't have any registered vehicles yet! Please <a href="{{ url_for('add_vehicle') }}" style="color: #60a5fa; text-decoration: underline;">register a vehicle first</a>.</p>
+            {% endif %}
+        </div>
+
+        <div style="margin-bottom: 1.5rem;">
+            <label style="display: block; font-weight: 600; margin-bottom: 0.8rem; color: #e2e8f0;">Select Insurance Plan *</label>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 15px;">
+                <label style="background: rgba(30, 41, 59, 0.8); border: 2px solid rgba(214, 157, 58, 0.5); padding: 15px; border-radius: 12px; cursor: pointer; display: block;">
+                    <input type="radio" name="policy_type" value="Comprehensive" checked style="margin-right: 8px;" />
+                    <strong style="color: #d69d3a; font-size: 1.1rem;">Comprehensive Plan</strong>
+                    <p style="font-size: 0.85rem; color: #94a3b8; margin-top: 5px;">Full accidental damage, theft, natural disaster & 3rd party protection.</p>
+                    <div style="margin-top: 10px; font-weight: 700; color: #10b981;">₹7,500 / year</div>
+                </label>
+
+                <label style="background: rgba(30, 41, 59, 0.8); border: 1px solid rgba(255, 255, 255, 0.15); padding: 15px; border-radius: 12px; cursor: pointer; display: block;">
+                    <input type="radio" name="policy_type" value="Zero Depreciation" style="margin-right: 8px;" />
+                    <strong style="color: #60a5fa; font-size: 1.1rem;">Zero Depreciation</strong>
+                    <p style="font-size: 0.85rem; color: #94a3b8; margin-top: 5px;">100% claim payout on rubber, metal, and plastic parts without depreciation.</p>
+                    <div style="margin-top: 10px; font-weight: 700; color: #10b981;">₹9,800 / year</div>
+                </label>
+
+                <label style="background: rgba(30, 41, 59, 0.8); border: 1px solid rgba(255, 255, 255, 0.15); padding: 15px; border-radius: 12px; cursor: pointer; display: block;">
+                    <input type="radio" name="policy_type" value="Third Party" style="margin-right: 8px;" />
+                    <strong style="color: #cbd5e1; font-size: 1.1rem;">Third Party Only</strong>
+                    <p style="font-size: 0.85rem; color: #94a3b8; margin-top: 5px;">Basic mandatory coverage legal requirement for third-party property damage.</p>
+                    <div style="margin-top: 10px; font-weight: 700; color: #10b981;">₹3,200 / year</div>
+                </label>
+
+                <label style="background: rgba(30, 41, 59, 0.8); border: 1px solid rgba(255, 255, 255, 0.15); padding: 15px; border-radius: 12px; cursor: pointer; display: block;">
+                    <input type="radio" name="policy_type" value="Commercial Vehicle" style="margin-right: 8px;" />
+                    <strong style="color: #f59e0b; font-size: 1.1rem;">Commercial Plan</strong>
+                    <p style="font-size: 0.85rem; color: #94a3b8; margin-top: 5px;">Designed for commercial fleet, goods transport, or taxi vehicles.</p>
+                    <div style="margin-top: 10px; font-weight: 700; color: #10b981;">₹12,500 / year</div>
+                </label>
+            </div>
+        </div>
+
+        <div style="margin-bottom: 1.5rem;">
+            <label style="display: block; font-weight: 600; margin-bottom: 0.5rem; color: #e2e8f0;">Coverage Details & Add-ons</label>
+            <input type="text" name="coverage" value="Full Body, Engine Protection, Roadside Assistance" style="width: 100%; padding: 12px; border-radius: 8px; background: #1e293b; color: #fff; border: 1px solid rgba(255,255,255,0.2);" />
+        </div>
+
+        <div style="display: flex; gap: 10px; justify-content: flex-end; margin-top: 2rem;">
+            <a href="{{ url_for('dashboard') }}" class="btn btn-ghost">Cancel</a>
+            <button type="submit" class="btn btn-primary" style="padding: 12px 28px; font-size: 1rem; background: #2563eb;" {% if not vehicles %}disabled{% endif %}>
+                Confirm & Enroll Policy →
+            </button>
+        </div>
+    </form>
+</div>
+{% endblock %}

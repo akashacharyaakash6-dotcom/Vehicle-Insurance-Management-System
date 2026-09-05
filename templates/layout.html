@@ -5,6 +5,44 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{% block title %}Vehicle Insurance System{% endblock %}</title>
     <link rel="stylesheet" href="/static/css/style.css" />
+    <style>
+        .portal-badge {
+            display: inline-block;
+            padding: 4px 10px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            border-radius: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-top: 4px;
+        }
+        .portal-badge.agent {
+            background: linear-gradient(135deg, #d69d3a, #9c6c1d);
+            color: #ffffff;
+        }
+        .portal-badge.customer {
+            background: linear-gradient(135deg, #2563eb, #1d4ed8);
+            color: #ffffff;
+        }
+        .portal-switch-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(214, 157, 58, 0.15);
+            color: #d69d3a;
+            border: 1px solid rgba(214, 157, 58, 0.4);
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+        .portal-switch-btn:hover {
+            background: #d69d3a;
+            color: #111827;
+        }
+    </style>
 </head>
 <body>
     <div class="app-shell">
@@ -13,7 +51,11 @@
                 <div class="brand-mark">VI</div>
                 <div>
                     <p class="brand-title">Vehicle Insurance</p>
-                    <span class="brand-subtitle">Management Hub</span>
+                    {% if active_portal == 'agent' %}
+                        <span class="portal-badge agent">⚡ AGENT PORTAL</span>
+                    {% else %}
+                        <span class="portal-badge customer">👤 CUSTOMER PORTAL</span>
+                    {% endif %}
                 </div>
             </div>
 
@@ -21,33 +63,64 @@
                 <a href="{{ url_for('dashboard') }}" class="sidebar-link {% if request.path == '/dashboard' %}active{% endif %}">
                     <span>Dashboard</span>
                 </a>
-                <a href="{{ url_for('customers') }}" class="sidebar-link {% if request.path.startswith('/customers') %}active{% endif %}">
-                    <span>Customers</span>
-                </a>
-                <a href="{{ url_for('vehicles') }}" class="sidebar-link {% if request.path.startswith('/vehicles') %}active{% endif %}">
-                    <span>Vehicles</span>
-                </a>
-                <a href="{{ url_for('policies') }}" class="sidebar-link {% if request.path.startswith('/policies') %}active{% endif %}">
-                    <span>Policies</span>
-                </a>
-                <a href="{{ url_for('view_claims') }}" class="sidebar-link {% if request.path.startswith('/claims') %}active{% endif %}">
-                    <span>Claims</span>
-                </a>
-                <a href="{{ url_for('payments') }}" class="sidebar-link {% if request.path.startswith('/payments') %}active{% endif %}">
-                    <span>Payments</span>
-                </a>
-                <a href="{{ url_for('reports') }}" class="sidebar-link {% if request.path.startswith('/reports') %}active{% endif %}">
-                    <span>Reports</span>
-                </a>
+
+                {% if active_portal == 'agent' %}
+                    <!-- AGENT WEBSITE NAVIGATION -->
+                    <a href="{{ url_for('customers') }}" class="sidebar-link {% if request.path.startswith('/customers') %}active{% endif %}">
+                        <span>All Customers</span>
+                    </a>
+                    <a href="{{ url_for('vehicles') }}" class="sidebar-link {% if request.path == '/vehicles' or request.path.startswith('/vehicles/VEH') %}active{% endif %}">
+                        <span>All Vehicles</span>
+                    </a>
+                    <a href="{{ url_for('policies') }}" class="sidebar-link {% if request.path == '/policies' or request.path.startswith('/policies/POL') %}active{% endif %}">
+                        <span>All Policies</span>
+                    </a>
+                    <a href="{{ url_for('add_policy') }}" class="sidebar-link {% if request.path == '/policies/add' %}active{% endif %}">
+                        <span>+ Issue Policy</span>
+                    </a>
+                    <a href="{{ url_for('view_claims') }}" class="sidebar-link {% if request.path.startswith('/claims') %}active{% endif %}">
+                        <span>Review Claims</span>
+                    </a>
+                    <a href="{{ url_for('payments') }}" class="sidebar-link {% if request.path.startswith('/payments') %}active{% endif %}">
+                        <span>Payments & Dues</span>
+                    </a>
+                    <a href="{{ url_for('reports') }}" class="sidebar-link {% if request.path.startswith('/reports') %}active{% endif %}">
+                        <span>Analytics Reports</span>
+                    </a>
+                {% else %}
+                    <!-- CUSTOMER WEBSITE NAVIGATION -->
+                    <a href="{{ url_for('vehicles') }}" class="sidebar-link {% if request.path == '/vehicles' or request.path.startswith('/vehicles/VEH') %}active{% endif %}">
+                        <span>My Vehicles</span>
+                    </a>
+                    <a href="{{ url_for('add_vehicle') }}" class="sidebar-link {% if request.path == '/vehicles/add' %}active{% endif %}">
+                        <span>+ Register Vehicle</span>
+                    </a>
+                    <a href="{{ url_for('policies') }}" class="sidebar-link {% if request.path == '/policies' or request.path.startswith('/policies/POL') %}active{% endif %}">
+                        <span>My Policies</span>
+                    </a>
+                    <a href="{{ url_for('apply_policy') }}" class="sidebar-link {% if request.path == '/policies/apply' %}active{% endif %}">
+                        <span>+ Buy Insurance</span>
+                    </a>
+                    <a href="{{ url_for('view_claims') }}" class="sidebar-link {% if request.path == '/claims/view' %}active{% endif %}">
+                        <span>Track Claims</span>
+                    </a>
+                    <a href="{{ url_for('add_claim') }}" class="sidebar-link {% if request.path == '/claims/add' %}active{% endif %}">
+                        <span>+ Submit Claim</span>
+                    </a>
+                    <a href="{{ url_for('payments') }}" class="sidebar-link {% if request.path.startswith('/payments') %}active{% endif %}">
+                        <span>Pay Dues & Bills</span>
+                    </a>
+                {% endif %}
+
                 <a href="{{ url_for('settings') }}" class="sidebar-link {% if request.path.startswith('/settings') %}active{% endif %}">
-                    <span>Settings</span>
+                    <span>Account Settings</span>
                 </a>
             </nav>
 
             <div class="sidebar-footer">
                 <span class="sidebar-user">Signed in as</span>
                 <strong>{{ username }}</strong>
-                <a href="/logout" class="btn btn-ghost">Logout</a>
+                <a href="/logout" class="btn btn-ghost" style="margin-top: 8px;">Logout</a>
             </div>
         </aside>
 
@@ -60,18 +133,27 @@
                     </div>
                 </div>
                 <div class="topbar-right">
+                    {% if active_portal == 'agent' %}
+                        <a href="{{ url_for('switch_portal', portal_type='customer') }}" class="portal-switch-btn" title="Preview Customer Website View">
+                            🔄 Switch to Customer Portal
+                        </a>
+                    {% else %}
+                        <a href="{{ url_for('switch_portal', portal_type='agent') }}" class="portal-switch-btn" title="Switch to Agent Website View">
+                            ⚡ Switch to Agent Portal
+                        </a>
+                    {% endif %}
+
                     {% block topbar_tools %}
                     <form action="{{ request.path }}" method="get" class="search-form">
                         <label for="searchInput" class="sr-only">Search</label>
                         <input id="searchInput" type="search" name="q" value="{{ request.args.get('q', '') }}" placeholder="Search records" />
-                        <button type="submit" class="btn btn-icon">Search</button>
                     </form>
                     {% endblock %}
                     <button type="button" class="icon-btn sidebar-toggle" id="sidebarToggle" aria-label="Toggle navigation">Menu</button>
                     <div class="profile-pill">
                         <div class="profile-avatar">{{ username[:1] | upper }}</div>
                         <div>
-                            <p class="profile-label">Welcome back</p>
+                            <p class="profile-label">{% if active_portal == 'agent' %}Agent Mode{% else %}Customer Mode{% endif %}</p>
                             <strong>{{ username }}</strong>
                         </div>
                     </div>
@@ -87,3 +169,4 @@
     <script src="/static/js/dashboard.js"></script>
 </body>
 </html>
+

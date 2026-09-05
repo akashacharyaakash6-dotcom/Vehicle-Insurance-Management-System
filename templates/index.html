@@ -31,6 +31,15 @@
             {% endwith %}
 
             <form id="loginForm" action="/" method="post" novalidate>
+                <div style="display: flex; gap: 10px; margin-bottom: 1.5rem; justify-content: center;">
+                    <label style="flex: 1; text-align: center; background: rgba(214, 157, 58, 0.15); border: 1px solid rgba(214, 157, 58, 0.5); padding: 10px; border-radius: 12px; cursor: pointer; color: #d69d3a; font-weight: 600;">
+                        <input type="radio" name="role" value="agent" style="margin-right: 4px;" /> ⚡ Agent Portal
+                    </label>
+                    <label style="flex: 1; text-align: center; background: rgba(37, 99, 235, 0.15); border: 1px solid rgba(59, 130, 246, 0.5); padding: 10px; border-radius: 12px; cursor: pointer; color: #60a5fa; font-weight: 600;">
+                        <input type="radio" name="role" value="customer" checked style="margin-right: 4px;" /> 👤 Customer Portal
+                    </label>
+                </div>
+
                 <div class="form-group form-group-special">
                     <div class="input-wrapper">
                         <div class="input-icon">
@@ -54,7 +63,7 @@
                             </svg>
                         </div>
                         <input type="email" id="email" name="email" class="form-control special-input" placeholder=" " required />
-                        <label for="email" class="floating-label">Gmail Address</label>
+                        <label for="email" class="floating-label">Email Address</label>
                     </div>
                     <span class="error-message" id="emailError"></span>
                 </div>
@@ -90,12 +99,40 @@
                     <a href="#" class="forgot-link">Forgot Password?</a>
                 </div>
 
-                <button type="submit" class="btn-primary">Login</button>
-                <p class="footer-text">New user? Your account will be created automatically if Gmail is not found.</p>
+                <button type="submit" class="btn-primary">Login to Portal</button>
+
+                <div style="margin-top: 1.5rem; text-align: center;">
+                    <p style="font-size: 0.85rem; color: #94a3b8; margin-bottom: 8px;">Instant Demo Login Credentials:</p>
+                    <div style="display: flex; gap: 8px; justify-content: center;">
+                        <button type="button" onclick="fillDemo('Agent Admin', 'agent@insurance.com', 'agent123', 'agent')" style="padding: 6px 12px; background: rgba(214,157,58,0.2); border: 1px solid #d69d3a; color: #d69d3a; border-radius: 16px; font-size: 0.75rem; cursor: pointer;">
+                            ⚡ Agent Demo Login
+                        </button>
+                        <button type="button" onclick="fillDemo('John Doe', 'john@example.com', 'customer123', 'customer')" style="padding: 6px 12px; background: rgba(37,99,235,0.2); border: 1px solid #60a5fa; color: #60a5fa; border-radius: 16px; font-size: 0.75rem; cursor: pointer;">
+                            👤 Customer Demo Login
+                        </button>
+                    </div>
+                </div>
+
+                <p class="footer-text" style="margin-top: 1rem;">New user? <a href="/register" style="color: #d69d3a; text-decoration: underline;">Create account here</a></p>
             </form>
         </div>
     </div>
 
+    <script>
+        function fillDemo(username, email, password, role) {
+            document.getElementById('username').value = username;
+            document.getElementById('email').value = email;
+            document.getElementById('password').value = password;
+            const roleRadios = document.getElementsByName('role');
+            for (let r of roleRadios) {
+                if (r.value === role) r.checked = true;
+            }
+            // Trigger floating label animations
+            document.querySelectorAll('.special-input').forEach(input => {
+                input.dispatchEvent(new Event('input', { bubbles: true }));
+            });
+        }
+    </script>
     <script src="/static/js/login.js"></script>
 </body>
 </html>

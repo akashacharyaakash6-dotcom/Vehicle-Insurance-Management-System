@@ -11,4 +11,6 @@ class Vehicle:
     year: str
     engine_no: str
     chassis_no: str
+    vehicle_type: str = "Car"
+    registration_date: str = ""
     id: int = None

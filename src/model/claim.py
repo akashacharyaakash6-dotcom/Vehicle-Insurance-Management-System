@@ -15,5 +15,7 @@ class Claim:
     description: str
     status: str
     documents: str
+    user_id: str = ""
+    vehicle_id: str = ""
     incident_location: str = ""
     id: int = None

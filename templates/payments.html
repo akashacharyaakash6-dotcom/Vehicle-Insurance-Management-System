@@ -2,20 +2,20 @@
 
 {% block title %}Payments - Vehicle Insurance{% endblock %}
 {% block breadcrumb %}Payments{% endblock %}
-{% block page_heading %}Payment Management{% endblock %}
+{% block page_heading %}My Payments & Premium Invoices{% endblock %}
 
 {% block content %}
 <div class="stats-grid">
-    <article class="metric-card"><div class="metric-title"><p>Total Payments</p></div><p class="metric-value">{{ payments|length }}</p><div class="metric-meta"><span class="metric-badge">Transactions</span><span>Records</span></div></article>
-    <article class="metric-card"><div class="metric-title"><p>Pending Payments</p></div><p class="metric-value">{{ pending_count }}</p><div class="metric-meta"><span class="metric-badge">Due</span><span>Invoices</span></div></article>
+    <article class="metric-card"><div class="metric-title"><p>Total Records</p></div><p class="metric-value">{{ payments|length }}</p><div class="metric-meta"><span class="metric-badge">Transactions</span><span>Invoices</span></div></article>
+    <article class="metric-card"><div class="metric-title"><p>Pending Due</p></div><p class="metric-value">{{ pending_count }}</p><div class="metric-meta"><span class="metric-badge">Due</span><span>Action Needed</span></div></article>
     <article class="metric-card"><div class="metric-title"><p>Completed Payments</p></div><p class="metric-value">{{ completed_count }}</p><div class="metric-meta"><span class="metric-badge">Settled</span><span>Success</span></div></article>
-    <article class="metric-card"><div class="metric-title"><p>Revenue</p></div><p class="metric-value">₹{{ '%.2f'|format(total_revenue) }}</p><div class="metric-meta"><span class="metric-badge">Total</span><span>Collected</span></div></article>
+    <article class="metric-card"><div class="metric-title"><p>Total Paid</p></div><p class="metric-value">₹{{ '%.2f'|format(total_revenue) }}</p><div class="metric-meta"><span class="metric-badge">Total</span><span>Paid Amount</span></div></article>
 </div>
 
 <div class="panel-card">
-    <div class="panel-card-header"><div><p class="eyebrow">Payments</p><h2>Payment History</h2></div></div>
+    <div class="panel-card-header"><div><p class="eyebrow">Payments</p><h2>Insurance Premium Statements</h2></div></div>
     <form action="{{ url_for('payments') }}" method="get" class="search-form">
-        <input type="search" name="q" value="{{ query }}" placeholder="Search by policy, customer, or status" />
+        <input type="search" name="q" value="{{ query }}" placeholder="Search by policy, ref, or status" />
         <button type="submit" class="btn btn-secondary">Search</button>
     </form>
 </div>
@@ -23,26 +23,35 @@
 <div class="table-panel">
     <table class="data-table">
         <thead>
-            <tr><th>Payment ID</th><th>Customer</th><th>Policy</th><th>Amount</th><th>Payment Date</th><th>Due Date</th><th>Method</th><th>Status</th></tr>
+            <tr><th>Payment ID</th><th>Policy Number</th><th>Premium Amount</th><th>Payment Date</th><th>Transaction Ref</th><th>Status</th><th>Action</th></tr>
         </thead>
         <tbody>
             {% if payments %}
                 {% for p in payments %}
                     <tr>
+                        <td><strong>{{ p.payment_id }}</strong></td>
                         <td>{{ p.policy_id }}</td>
-                        <td>{{ p.customer_id }}</td>
-                        <td>{{ p.policy_id }}</td>
-                        <td>{{ p.amount }}</td>
+                        <td>₹{{ p.amount }}</td>
                         <td>{{ p.payment_date }}</td>
-                        <td>{{ p.due_date }}</td>
-                        <td>{{ p.method }}</td>
-                        <td><span class="status-pill {% if p.status == 'Due' %}pending{% else %}active{% endif %}">{{ p.status }}</span></td>
+                        <td><code>{{ p.transaction_id }}</code></td>
+                        <td><span class="status-pill {% if p.status.lower() == 'due' %}pending{% else %}active{% endif %}">{{ p.status }}</span></td>
+                        <td>
+                            {% if p.status.lower() == 'due' %}
+                                <form action="{{ url_for('process_payment', policy_id=p.policy_id) }}" method="post" style="display:inline;">
+                                    <input type="hidden" name="amount" value="{{ p.amount }}">
+                                    <button type="submit" class="btn btn-sm btn-primary">Pay Now</button>
+                                </form>
+                            {% else %}
+                                <span class="badge badge-success">Receipt</span>
+                            {% endif %}
+                        </td>
                     </tr>
                 {% endfor %}
             {% else %}
-                <tr><td colspan="8">No payment records found.</td></tr>
+                <tr><td colspan="7">No payment records found.</td></tr>
             {% endif %}
         </tbody>
     </table>
 </div>
 {% endblock %}
+

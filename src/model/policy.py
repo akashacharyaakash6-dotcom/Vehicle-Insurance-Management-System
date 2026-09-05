@@ -12,4 +12,6 @@ class Policy:
     end_date: str
     coverage: str
     status: str
+    policy_number: str = ""
+    expiry_date: str = ""
     id: int = None

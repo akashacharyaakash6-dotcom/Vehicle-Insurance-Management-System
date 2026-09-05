@@ -1,0 +1,117 @@
+{% extends "layout.html" %}
+
+{% block title %}Customer Portal - Vehicle Insurance Self-Service{% endblock %}
+{% block breadcrumb %}Customer Portal / My Dashboard{% endblock %}
+{% block page_heading %}Welcome, {{ username }}{% endblock %}
+
+{% block content %}
+<div class="panel-card" style="background: linear-gradient(135deg, rgba(37, 99, 235, 0.15), rgba(30, 41, 59, 0.95)); border: 1px solid rgba(59, 130, 246, 0.3);">
+    <div class="panel-card-header">
+        <div>
+            <p class="eyebrow" style="color: #60a5fa;">👤 Customer Self-Service Portal</p>
+            <h2 style="color: #ffffff;">My Vehicle Insurance Account</h2>
+            <p class="text-muted">Account ID: <strong>{{ user_id }}</strong> | Date: {{ today }}</p>
+        </div>
+        <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+            <a href="{{ url_for('apply_policy') }}" class="btn btn-primary" style="background: #2563eb;">+ Buy Insurance</a>
+            <a href="{{ url_for('add_vehicle') }}" class="btn btn-secondary">+ Register Vehicle</a>
+            <a href="{{ url_for('add_claim') }}" class="btn btn-ghost" style="border: 1px solid #60a5fa; color: #60a5fa;">+ File Claim</a>
+        </div>
+    </div>
+</div>
+
+<div class="stats-grid" style="margin-top: 1.5rem;">
+    <article class="metric-card">
+        <div class="metric-title"><p>My Vehicles</p></div>
+        <p class="metric-value">{{ total_vehicles }}</p>
+        <div class="metric-meta"><span class="metric-badge">Registered</span><span>Vehicles</span></div>
+    </article>
+    <article class="metric-card">
+        <div class="metric-title"><p>My Active Policies</p></div>
+        <p class="metric-value" style="color: #10b981;">{{ active_policies }}</p>
+        <div class="metric-meta"><span class="metric-badge">Covered</span><span>Policies</span></div>
+    </article>
+    <article class="metric-card">
+        <div class="metric-title"><p>My Claims</p></div>
+        <p class="metric-value" style="color: #f59e0b;">{{ pending_claims }}</p>
+        <div class="metric-meta"><span class="metric-badge" style="background: rgba(245, 158, 11, 0.2); color: #f59e0b;">Pending Status</span></div>
+    </article>
+    <article class="metric-card">
+        <div class="metric-title"><p>Payment Dues</p></div>
+        <p class="metric-value" style="color: #ef4444;">{{ due_policies | length }}</p>
+        <div class="metric-meta"><span class="metric-badge" style="background: rgba(239, 68, 68, 0.2); color: #ef4444;">Dues Pending</span></div>
+    </article>
+</div>
+
+{% if due_policies %}
+<div class="panel-card" style="margin-top: 1.5rem; background: rgba(239, 68, 68, 0.08); border: 1px solid rgba(239, 68, 68, 0.3);">
+    <div class="panel-card-header">
+        <div>
+            <h3 style="color: #f87171;">⚠️ Pending Insurance Premium Payment Dues</h3>
+            <p class="text-muted">You have {{ due_policies | length }} policy renewal due. Keep your vehicle protected!</p>
+        </div>
+        <a href="{{ url_for('payments') }}" class="btn btn-primary" style="background: #ef4444; color: white;">Pay Premium Now →</a>
+    </div>
+</div>
+{% endif %}
+
+<div class="chart-grid" style="margin-top: 1.5rem;">
+    <section class="chart-panel">
+        <div class="panel-card-header">
+            <div>
+                <h3>My Vehicles Overview</h3>
+                <p class="text-muted">Your registered automobiles under policy coverage.</p>
+            </div>
+            <a href="{{ url_for('add_vehicle') }}" class="btn btn-ghost" style="font-size: 0.8rem;">+ Add New</a>
+        </div>
+        {% if vehicles %}
+            <ul style="list-style: none; padding: 0; margin-top: 1rem;">
+                {% for v in vehicles %}
+                <li style="display: flex; justify-content: space-between; align-items: center; padding: 12px; border-bottom: 1px solid rgba(255,255,255,0.08);">
+                    <div>
+                        <strong>{{ v.brand }} {{ v.model }}</strong> ({{ v.year }})
+                        <br /><span class="text-muted" style="font-size: 0.85rem;">Reg No: {{ v.vehicle_number }} | Type: {{ v.vehicle_type }}</span>
+                    </div>
+                    <a href="{{ url_for('view_vehicle', vehicle_id=v.vehicle_id) }}" class="btn btn-ghost" style="font-size: 0.8rem;">Details →</a>
+                </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p class="text-muted" style="margin-top: 1rem;">No vehicles registered yet. <a href="{{ url_for('add_vehicle') }}">Register your vehicle</a></p>
+        {% endif %}
+    </section>
+
+    <section class="chart-panel">
+        <div class="panel-card-header">
+            <div>
+                <h3>My Insurance Claims Tracker</h3>
+                <p class="text-muted">Status of claims submitted for damage or accident claims.</p>
+            </div>
+            <a href="{{ url_for('add_claim') }}" class="btn btn-ghost" style="font-size: 0.8rem;">+ Submit Claim</a>
+        </div>
+        {% if claims %}
+            <ul style="list-style: none; padding: 0; margin-top: 1rem;">
+                {% for c in claims %}
+                <li style="display: flex; justify-content: space-between; align-items: center; padding: 12px; border-bottom: 1px solid rgba(255,255,255,0.08);">
+                    <div>
+                        <strong>Claim {{ c.claim_id }}</strong> - ₹{{ c.claim_amount }}
+                        <br /><span class="text-muted" style="font-size: 0.85rem;">Date: {{ c.claim_date }} | {{ c.reason }}</span>
+                    </div>
+                    <div>
+                        {% if c.status.lower() == 'approved' %}
+                            <span class="status-badge" style="background: #10b981; color: white;">Approved</span>
+                        {% elif c.status.lower() == 'rejected' %}
+                            <span class="status-badge" style="background: #ef4444; color: white;">Rejected</span>
+                        {% else %}
+                            <span class="status-badge" style="background: #f59e0b; color: white;">In Review</span>
+                        {% endif %}
+                    </div>
+                </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p class="text-muted" style="margin-top: 1rem;">No active claims. Have an incident? <a href="{{ url_for('add_claim') }}">File a Claim</a></p>
+        {% endif %}
+    </section>
+</div>
+{% endblock %}

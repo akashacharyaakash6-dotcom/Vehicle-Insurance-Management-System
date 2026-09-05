@@ -1,0 +1,105 @@
+{% extends "layout.html" %}
+
+{% block title %}Agent Website Dashboard - Vehicle Insurance Management{% endblock %}
+{% block breadcrumb %}Agent Portal / Executive Overview{% endblock %}
+{% block page_heading %}Agent Management Command Center{% endblock %}
+
+{% block content %}
+<div class="panel-card" style="background: linear-gradient(135deg, rgba(30, 41, 59, 0.95), rgba(15, 23, 42, 0.98)); border: 1px solid rgba(214, 157, 58, 0.3);">
+    <div class="panel-card-header">
+        <div>
+            <p class="eyebrow" style="color: #d69d3a;">⚡ Agent Control Portal</p>
+            <h2 style="color: #ffffff;">System Overview & Operational Metrics</h2>
+            <p class="text-muted" style="margin-top: 4px;">Welcome Agent <strong>{{ username }}</strong>. Manage all customer accounts, policies, vehicles, and process insurance claims.</p>
+        </div>
+        <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+            <a href="{{ url_for('add_policy') }}" class="btn btn-primary">+ Issue Policy</a>
+            <a href="{{ url_for('add_customer') }}" class="btn btn-secondary">+ Add Customer</a>
+        </div>
+    </div>
+</div>
+
+<div class="stats-grid" style="margin-top: 1.5rem;">
+    <article class="metric-card">
+        <div class="metric-title"><p>Total Customers</p></div>
+        <p class="metric-value" style="color: #d69d3a;">{{ total_customers }}</p>
+        <div class="metric-meta"><span class="metric-badge">System-wide</span><span>Accounts</span></div>
+    </article>
+    <article class="metric-card">
+        <div class="metric-title"><p>Insured Vehicles</p></div>
+        <p class="metric-value">{{ total_vehicles }}</p>
+        <div class="metric-meta"><span class="metric-badge">Registered</span><span>Fleet</span></div>
+    </article>
+    <article class="metric-card">
+        <div class="metric-title"><p>Active Policies</p></div>
+        <p class="metric-value" style="color: #10b981;">{{ active_policies }}</p>
+        <div class="metric-meta"><span class="metric-badge">Live</span><span>Coverage</span></div>
+    </article>
+    <article class="metric-card">
+        <div class="metric-title"><p>Pending Claims</p></div>
+        <p class="metric-value" style="color: #f59e0b;">{{ pending_claims }}</p>
+        <div class="metric-meta"><span class="metric-badge" style="background: rgba(245, 158, 11, 0.2); color: #f59e0b;">Requires Action</span></div>
+    </article>
+    <article class="metric-card">
+        <div class="metric-title"><p>Total Revenue</p></div>
+        <p class="metric-value" style="color: #3b82f6;">₹{{ "%.2f"|format(total_revenue) }}</p>
+        <div class="metric-meta"><span class="metric-badge">Collected</span><span>Premiums</span></div>
+    </article>
+</div>
+
+<div class="table-container" style="margin-top: 2rem;">
+    <div class="panel-card-header">
+        <div>
+            <h3>Recent Claims Awaiting Agent Review</h3>
+            <p class="text-muted">Review, approve, or reject pending customer claim submissions.</p>
+        </div>
+        <a href="{{ url_for('view_claims') }}" class="btn btn-ghost">View All Claims →</a>
+    </div>
+
+    {% if recent_claims %}
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th>Claim ID</th>
+                <th>Policy ID</th>
+                <th>Customer Name</th>
+                <th>Accident Date</th>
+                <th>Claim Amount</th>
+                <th>Status</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for claim in recent_claims %}
+            <tr>
+                <td><strong>{{ claim.claim_id }}</strong></td>
+                <td>{{ claim.policy_id }}</td>
+                <td>{{ claim.customer_name or "N/A" }}</td>
+                <td>{{ claim.accident_date }}</td>
+                <td>₹{{ claim.claim_amount }}</td>
+                <td>
+                    {% if claim.status.lower() == 'approved' %}
+                        <span class="status-badge badge-active" style="background: #10b981; color: white;">Approved</span>
+                    {% elif claim.status.lower() == 'rejected' %}
+                        <span class="status-badge badge-expired" style="background: #ef4444; color: white;">Rejected</span>
+                    {% else %}
+                        <span class="status-badge badge-pending" style="background: #f59e0b; color: white;">Pending Action</span>
+                    {% endif %}
+                </td>
+                <td>
+                    {% if claim.status.lower() == 'pending' %}
+                        <a href="{{ url_for('claim_action', claim_id=claim.claim_id, action='approve') }}" class="btn btn-primary" style="padding: 4px 10px; font-size: 0.75rem; background: #10b981;">Approve</a>
+                        <a href="{{ url_for('claim_action', claim_id=claim.claim_id, action='reject') }}" class="btn btn-secondary" style="padding: 4px 10px; font-size: 0.75rem; background: #ef4444; color: white;">Reject</a>
+                    {% else %}
+                        <span class="text-muted" style="font-size: 0.85rem;">Decided</span>
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+        <p class="text-muted" style="padding: 1rem;">No claims currently submitted.</p>
+    {% endif %}
+</div>
+{% endblock %}

@@ -22,13 +22,13 @@ const validateUsername = () => {
 
 const validateEmail = () => {
     const value = emailInput.value.trim();
-    const gmailPattern = /^[a-zA-Z0-9._%+-]+@gmail\.com$/;
+    const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     if (!value) {
-        emailError.textContent = 'Gmail address is required.';
+        emailError.textContent = 'Email address is required.';
         return false;
     }
-    if (!gmailPattern.test(value)) {
-        emailError.textContent = 'Please enter a valid Gmail address.';
+    if (!emailPattern.test(value)) {
+        emailError.textContent = 'Please enter a valid email address.';
         return false;
     }
     emailError.textContent = '';
